@@ -117,6 +117,28 @@ class _VideoAppState extends State<FaceVideoApp> {
         });
       ;
     }
+    else if(_facenumber == 10 ){
+      _controller = VideoPlayerController.network(
+        'https://github.com/cherrytank/stroke_rehabilitation_app/raw/main/assets/face_videos/8.mp4',
+      )
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          setState(() {});
+          _controller.play();
+        });
+      ;
+    }
+    else if(_facenumber == 11 ){
+      _controller = VideoPlayerController.network(
+        'https://github.com/cherrytank/stroke_rehabilitation_app/raw/main/assets/face_videos/8.mp4',
+      )
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          setState(() {});
+          _controller.play();
+        });
+      ;
+    }
     /*_controller = VideoPlayerController.asset('assets/face_videos/${_facenumber}.mp4')
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
@@ -203,6 +225,14 @@ class _VideoAppState extends State<FaceVideoApp> {
                       case 9:
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context)=>speech()));
+                        break;
+                      case 10:
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context)=>head_turn()));
+                        break;
+                      case 11:
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context)=>Shoulder_activities()));
                         break;
                     }
                   },

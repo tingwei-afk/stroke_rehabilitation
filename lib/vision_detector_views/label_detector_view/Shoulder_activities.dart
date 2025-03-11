@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:stroke_rehabilitation_app/vision_detector_views/body_view/assembly.dart';
+import '../body_view/assembly.dart';
+import 'package:audioplayers/audioplayers.dart';//播放音檔
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_image_labeling/google_mlkit_image_labeling.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:audioplayers/audioplayers.dart';//播放音檔
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import '../../app_state.dart';
 import '../../trainmouth/trainmouth_widget.dart';
@@ -16,19 +16,19 @@ import 'package:http/http.dart' as http;
 import '/main.dart';
 import 'package:intl/intl.dart';
 
-class headneck_bend extends StatefulWidget {
+class Shoulder_activities extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _PoseDetectorViewState();
 }
 
-class _PoseDetectorViewState extends State<headneck_bend> {
+class _PoseDetectorViewState extends State<Shoulder_activities> {
   final PoseDetector _poseDetector =
   PoseDetector(options: PoseDetectorOptions());
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
-  Detector_headneck_bend Det = Detector_headneck_bend();
+  shoulder_activities Det = shoulder_activities();
   @override
   void initState() {
     super.initState();
@@ -255,7 +255,7 @@ class _PoseDetectorViewState extends State<headneck_bend> {
                           ),
                         ),
                         onPressed: () async {
-                          endout7();
+                          endout11();
                           Navigator.pop(context);
                         },
                       ),
@@ -294,11 +294,11 @@ class _PoseDetectorViewState extends State<headneck_bend> {
   }
 }
 
-class Detector_headneck_bend {
+class shoulder_activities {
   int posetimecounter = 0; //復健動作持續秒數
-  int posetimeTarget = 5; //復健動作持續秒數目標
+  int posetimeTarget = 10; //復健動作持續秒數目標
   int posecounter = 0; //復健動作實作次數
-  int poseTarget = 30; //目標次數設定
+  int poseTarget = 10; //目標次數設定
   bool startdDetector = false; //偵測
   bool endDetector = false; //跳轉
   bool DetectorED = false;
@@ -311,10 +311,15 @@ class Detector_headneck_bend {
   String mathText = "";//倒數文字
   bool buttom_false = true;//按下按鈕消失
   bool changeUI = false;
-  bool right_side = true;
+  bool right_side =true;
   bool timerui = true;
-  String mindText = "請將臉部拍攝於畫面內\n並維持鏡頭穩定\n準備完成請按「Start」";
+  bool sound = true;
+  String mindText = "請將全身拍攝於畫面內\n並維持手機直立\n準備完成請按「Start」";
+  String instructionText = "請挺胸";
   final player = AudioCache();//播放音檔
+  Timer? reminderTimer; // 用于定时提示
+  Timer? reminderTimer2; // 用於定時提示
+  Timer? reminderTimer3; // 用於定時提示
 
   void startd(){//倒數計時
     int counter = 5;
@@ -335,86 +340,101 @@ class Detector_headneck_bend {
 
   void startD() {
     //開始辨識
+
     this.changeUI = true;
     this.startdDetector = true;
     print("startdDetector be true");
     setStandpoint();
     settimer();
+    posesounder(false);
+    startReminder();//啟動提示
+    startReminder2();
+    startReminder3();
   }
+
   void poseDetector() {
-    //偵測判定
+    if (this.endDetector) {
+      stopReminder(); // 如果已结束检测，停止提醒
+      return;
+    }
+    if(distance(Standpoint_bodymind_x!, Standpoint_bodymind_y!,
+        (posedata[22]!+posedata[24]!)/2, (posedata[23]!+posedata[25]!)/2)>80&&this.startdDetector){//身體中點與標準點距離
+      this.orderText = "側傾過大";
+      stopReminder(); // 動作不正确，停止提醒
+      return ;
+    }
     if (this.startdDetector) {
       DetectorED = true;
-      if(right_side) {
-        this.orderText = "頭請向右傾";
-        if (this.posetimecounter == this.posetimeTarget) {
-          //秒數達成
-          this.startdDetector = false;
-          this.posecounter++;
-          this.posetimecounter = 0;
-          this.orderText = "達標!";
-          this.sounder(this.posecounter);
-          this.right_side = false;
-        }
-        if (distance(posedata[16]!, posedata[17]!, posedata[24]!, posedata[25]!)<310//耳與肩膀距離
-            && this.startdDetector) {
-          //每秒目標
-          this.posetimecounter++;
-          print(this.posetimecounter);
-          this.orderText = "請保持住!";
-        } else {
-          //沒有保持
-          this.posetimecounter = 0;
-        }
-      }else {
-        this.orderText = "頭請向左傾";
-        if (this.posetimecounter == this.posetimeTarget) {
-          //秒數達成
-          this.startdDetector = false;
-          this.posecounter++;
-          this.posetimecounter = 0;
-          this.orderText = "達標!";
-          this.sounder(this.posecounter);
-          this.right_side = true;
-        }
-        if (distance(posedata[14]!, posedata[15]!, posedata[22]!, posedata[23]!)<310//耳與肩膀距離
-            && this.startdDetector) {
-          //每秒目標
-          this.posetimecounter++;
-          print(this.posetimecounter);
-          this.orderText = "請保持住!";
-        } else {
-          //沒有保持
-          this.posetimecounter = 0;
-        }
+      print(posedata[23]!);
+      print(posedata[25]!);
+      print(this.Standpoint_Y!);
+      this.orderText = "請聳肩";
+      if (this.posetimecounter == this.posetimeTarget) {
+        //秒數達成
+        this.startdDetector = false;
+        this.posecounter++;
+        this.posetimecounter = 0;
+        this.orderText = "達標!";
+        this.sounder(this.posecounter);
+        startReminder();
+        posesounder(true);
       }
-    } else if (DetectorED) {
+      if (posedata[23]! < (this.Standpoint_Y!)&& this.startdDetector
+          &&(posedata[25]! < (this.Standpoint_Y!)&& this.startdDetector
+              &&this.startdDetector)) {
+        //每秒目標
+        this.posetimecounter++;
+        print(this.posetimecounter);
+        this.orderText = "請保持住!";
+        sound = true;
+        stopReminder();
+      } else {
+        //沒有保持
+        this.posetimecounter = 0;
+        this.sounder(999);
+        // return startD();
+        // startReminder(); // 啟動提示
+      }
+    }else if (DetectorED) {
       //預防空值被訪問
-      if (
-      distance(posedata[16]!, posedata[17]!, posedata[24]!, posedata[25]!)>210//耳與肩膀距離
-      || distance(posedata[14]!, posedata[15]!, posedata[22]!, posedata[23]!)>210//耳與肩膀距離
-      ) {
+      if (posedata[25]! > (this.Standpoint_Y!) && posedata[23]! > (this.Standpoint_Y!))
+      {
         //確認復歸
         this.startdDetector = true;
+        posesounder(false);
       } else {
-        this.orderText = "請回正頭";
+        this.orderText = "請面對前方";
       }
     }
   }
 
   void setStandpoint() {
     //設定基準點(左上角為(0,0)向右下)
-    // this.Standpoint_X = posedata[22]! - 20;
-    // this.Standpoint_Y = posedata[23]! - 20;
-    // this.Standpoint_bodymind_x = (posedata[22]!+posedata[24]!)/2;
-    // this.Standpoint_bodymind_y = (posedata[23]!+posedata[25]!)/2;
+    this.Standpoint_X = posedata[22]! - 10;
+    this.Standpoint_Y = posedata[23]! - 40;
+    this.Standpoint_X = posedata[24]! - 10;
+    this.Standpoint_Y = posedata[25]! - 40;
+    this.Standpoint_bodymind_x = (posedata[22]!+posedata[24]!)/2;
+    this.Standpoint_bodymind_y = (posedata[23]!+posedata[25]!)/2;
   }
 
   void posetargetdone() {
     //完成任務後發出退出信號
     if (this.posecounter == this.poseTarget) {
       this.endDetector = true;
+      stopReminder(); // 完成任务时停止提醒
+      stopReminder2();
+      stopReminder3();
+      sound = false;
     }
+  }
+
+  double yDistance(double x1,double y1,double x2,double y2){
+    return (y2 - y1).abs();
+  }
+
+  double xDistance(double x1,double y1,double x2,double y2){
+    return (x2 - x1).abs();
   }
 
   double distance(double x1,double y1,double x2,double y2){
@@ -441,21 +461,115 @@ class Detector_headneck_bend {
         if(!this.timerbool){
           print("cancel timer");
           timer.cancel();
+          stopReminder();
+          stopReminder2();
+          stopReminder3();
         }
       },
     );
   }
 
   void sounder(int counter){
-    player.play('pose_audios/${counter}.mp3');
+    if(counter == 999 && sound && startdDetector){
+      player.play('pose_audios/upper/shrug.mp3');
+      sound = false;
+      startReminder();
+    }else
+      player.play('pose_audios/${counter}.mp3');
+  }
+  Future<void> posesounder(bool BOO) async {
+    await Future.delayed(Duration(seconds: 2));
+    if(BOO){
+      player.play('pose_audios/done.mp3');
+    }
+    // else{
+    //   player.play('pose_audios/upper/shrug.mp3');
+    // }
+  }
+  void startReminder() {
+    // 确保之前的定时器被取消
+    stopReminder();
+    int counter = 0; // 新建一个计数器
+
+    reminderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      // 播放音频
+      if(startdDetector) {
+        player.play('pose_audios/upper/shrug.mp3');
+      }
+      // 每5秒归零并打印当前计数
+      print("计数器归零前的计数: $counter");
+      counter = 0; // 归零计数器
+
+      // 如果需要，可以在这里执行其他逻辑
+      print("计数器已归1");
+    });
   }
 
+  void stopReminder() {
+    reminderTimer?.cancel();
+    reminderTimer = null; // 确保不再使用
+  }
+
+  void startReminder2() {
+    // 确保之前的定时器被取消
+    stopReminder2();
+    int counter = 0; // 新建一个计数器
+
+    reminderTimer2 = Timer.periodic(const Duration(seconds: 2), (timer) async{
+      // 播放音频
+      if ((posedata[23]! < (this.Standpoint_Y!)&& this.startdDetector
+          &&(posedata[25]! < (this.Standpoint_Y!)&& this.startdDetector
+              &&this.startdDetector))
+          &&(!(distance(Standpoint_bodymind_x!, Standpoint_bodymind_y!,
+              (posedata[22]!+posedata[24]!)/2, (posedata[23]!+posedata[25]!)/2)>80&&this.startdDetector))) {
+        player.play('pose_audios/please_keep_it.mp3');
+      }
+
+
+      // 每5秒归零并打印当前计数
+      print("计数器归零前的计数: $counter");
+      counter = 0; // 归零计数器
+
+      // 如果需要，可以在这里执行其他逻辑
+      print("计数器已归2");
+    });
+  }
+  void stopReminder2() {
+    reminderTimer2?.cancel();
+    reminderTimer2 = null; // 确保不再使用
+  }
+  void startReminder3() {
+    // 确保之前的定时器被取消
+    stopReminder3();
+    int counter = 0; // 新建一个计数器
+
+    reminderTimer3 = Timer.periodic(const Duration(seconds: 3), (timer) async{
+      // 播放音频
+      if (distance(Standpoint_bodymind_x!, Standpoint_bodymind_y!,
+          (posedata[22]!+posedata[24]!)/2, (posedata[23]!+posedata[25]!)/2)>80&&this.startdDetector) {
+        player.play('pose_audios/upper/Excessive_roll.mp3');
+      }
+
+
+      // 每5秒归零并打印当前计数
+      print("计数器归零前的计数: $counter");
+      counter = 0; // 归零计数器
+
+      // 如果需要，可以在这里执行其他逻辑
+      print("计数器已归3");
+    });
+  }
+  void stopReminder3() {
+    reminderTimer3?.cancel();
+    reminderTimer3 = null; // 确保不再使用
+  }
 }
-Future<void> endout7() async {
+
+Future<void> endout11() async {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd').format(now);
   var url;
-  if(Face_Detect_Number==7){
+  if(Face_Detect_Number==11){
     url = Uri.parse(ip+"train_mouthok.php");
     print("初階,吞嚥");
   }

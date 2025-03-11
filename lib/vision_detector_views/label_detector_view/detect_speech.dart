@@ -29,16 +29,38 @@ import '../../flutter_flow/flutter_flow_util.dart';
 // }
 
 /// **第一個畫面：讓使用者選擇 PA、TA、KA**
-class speech extends StatelessWidget {
+class speech extends StatefulWidget {
   const speech({super.key});
 
-  void _navigateToDetectionScreen(BuildContext context, String phoneme) {
-    Navigator.push(
+  @override
+  State<speech> createState() => _SpeechScreenState();
+}
+
+class _SpeechScreenState extends State<speech> {
+  final Set<String> _completedPhonemes = {}; // 用來追蹤已測試音節
+
+  void _navigateToDetectionScreen(BuildContext context, String phoneme) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SoundDetectionScreen(selectedPhoneme: phoneme),
+        builder: (context) => SoundDetectionScreen(
+          selectedPhoneme: phoneme,
+        ),
       ),
     );
+
+    // 測完回來，加入已完成的音節
+    setState(() {
+      _completedPhonemes.add(phoneme);
+    });
+
+    // **當三個音節都測完時，自動跳轉到 TrainmouthWidget**
+    if (_completedPhonemes.containsAll(["PA", "TA", "KA"])) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TrainmouthWidget()),
+      );
+    }
   }
 
   @override
@@ -46,55 +68,25 @@ class speech extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          // 上方藍色標題區塊
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20), // 增加垂直間距
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             color: Colors.blue[500]!,
             child: Row(
               children: [
-                // 左邊的圖示
-                Image.asset(
-                  'assets/images/58.png', // 你的圖片路徑
-                  width: 50,
-                  height: 50,
-                ),
+                Image.asset('assets/images/58.png', width: 50, height: 50),
                 const SizedBox(width: 10),
-                // 右邊的標題文字
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "訓練音節",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    // Text(
-                    //   "オーラルフレイルのトレーニングをご紹介。",
-                    //   style: TextStyle(
-                    //     fontSize: 14,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
-                  ],
+                const Text(
+                  "訓練音節",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ],
             ),
           ),
-          // 主內容區塊
           Expanded(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // const Text(
-                  //   "請選擇一個音節",
-                  //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  // ),
-
-                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -104,6 +96,11 @@ class speech extends StatelessWidget {
                       const SizedBox(width: 20),
                       _buildPhonemeButton(context, "KA"),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "已完成：${_completedPhonemes.length}/3",
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ],
               ),
@@ -115,20 +112,22 @@ class speech extends StatelessWidget {
   }
 
   Widget _buildPhonemeButton(BuildContext context, String phoneme) {
+    bool isCompleted = _completedPhonemes.contains(phoneme);
+
     return GestureDetector(
-      onTap: () => _navigateToDetectionScreen(context, phoneme),
+      onTap: isCompleted ? null : () => _navigateToDetectionScreen(context, phoneme),
       child: Container(
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          color: Colors.blue[300]!,
+          color: isCompleted ? Colors.grey : Colors.blue[300]!,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 10,
               spreadRadius: 2,
-              offset: Offset(2, 4), // 陰影方向
+              offset: const Offset(2, 4),
             ),
           ],
         ),
@@ -247,7 +246,7 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
       _wordCount = 0;
       _soundLevel = 0.0;
       _hasAddedWord = false;
-      _remainingTime = 1; // 重置倒數
+      _remainingTime = 10; // 重置倒數
     });
   }
 

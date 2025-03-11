@@ -169,15 +169,15 @@ class _TrainmouthWidgetState extends State<TrainmouthWidget> {
                                           child: Wrap(//自動換行
                                             spacing: 60,// 垂直間距
                                             runSpacing: 20,// 垂直間距
-                                            alignment: WrapAlignment.center,//讓按鈕置中對齊
-                                            children: List.generate(9, (index) {//生成按鈕
+                                            alignment: WrapAlignment.start,//讓按鈕置中對齊
+                                            children: List.generate(11, (index) {//生成按鈕
                                               //  定義圖片
                                               List<String> buttonLabels = [
                                                 '抿唇動作', '臉頰微笑', '吐舌頭式', '嘟嘴式', '張嘴說阿',
-                                                '彈舌式', '頭頸側彎', '下巴運動', '發音練習', '新動作1', '新動作2'
+                                                '彈舌式', '頭頸側彎', '下巴運動', '發音練習', '頭部轉向', '肩部上下'
                                               ];
-                                              List<int> detectNumbers = [6, 1, 2, 3, 4, 5, 7, 8, 9];
-                                              // List<int> detectNumbers = [6, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11];
+
+                                              List<int> detectNumbers = [6, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11];
                                               //  設定圖片
                                               List<String> imagePaths = [
                                                 'assets/images/57.png', // 抿唇動作
@@ -189,8 +189,8 @@ class _TrainmouthWidgetState extends State<TrainmouthWidget> {
                                                 'assets/images/54.png', // 頭頸側彎
                                                 'assets/images/53.png', // 下巴運動
                                                 'assets/images/58.png', // 發音練習
-                                                'assets/images/58.png', // 新動作1
-                                                'assets/images/58.png', // 新動作2
+                                                'assets/images/59.png', // 頭部左右轉向
+                                                'assets/images/60.png', // 新動作2
                                               ];
 
                                               return GestureDetector(

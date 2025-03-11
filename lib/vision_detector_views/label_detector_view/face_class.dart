@@ -7,6 +7,8 @@ export 'detect_tongue.dart';
 export 'detect_chin_movement.dart';
 export 'detect_headneck_bend.dart';
 export 'detect_speech.dart';
+export 'detect_head_turn.dart';
+export 'Shoulder_activities.dart';
 /*
    tongue吐舌
    pursed_lips抿唇
