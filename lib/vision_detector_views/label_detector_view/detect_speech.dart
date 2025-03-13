@@ -2,65 +2,60 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:stroke_rehabilitation_app/vision_detector_views/label_detector_view/detect_headneck_bend.dart';
-import 'package:stroke_rehabilitation_app/vision_detector_views/label_detector_view/detect_pursed_lips.dart';
 import '../../trainmouth/trainmouth_widget.dart';
 import '../../main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 
-
-
-
-
-// void main() => runApp(const MyApp());
-
-// class speech extends StatelessWidget {
-//   const speech({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: PhonemeSelectionScreen(), // 啟動時顯示音節選擇畫面
-//     );
-//   }
-// }
-
 /// **第一個畫面：讓使用者選擇 PA、TA、KA**
 class speech extends StatefulWidget {
   const speech({super.key});
 
   @override
-  State<speech> createState() => _SpeechScreenState();
+  State<speech> createState() => _speechState();
 }
 
-class _SpeechScreenState extends State<speech> {
-  final Set<String> _completedPhonemes = {}; // 用來追蹤已測試音節
+class _speechState extends State<speech> {
+  // 用於追蹤已完成的音素測試
+  final Map<String, int> completedPhonemes = {
+    "PA": 0,
+    "TA": 0,
+    "KA": 0
+  };
 
-  void _navigateToDetectionScreen(BuildContext context, String phoneme) async {
-    await Navigator.push(
+  void _navigateToDetectionScreen(BuildContext context, String phoneme) {
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SoundDetectionScreen(
           selectedPhoneme: phoneme,
+          onComplete: (wordCount) {
+            setState(() {
+              completedPhonemes[phoneme] = wordCount;
+            });
+          },
         ),
       ),
     );
+  }
 
-    // 測完回來，加入已完成的音節
-    setState(() {
-      _completedPhonemes.add(phoneme);
-    });
+  // 檢查是否已完成所有測試
+  bool _allTestsCompleted() {
+    return completedPhonemes.values.every((count) => count > 0);
+  }
 
-    // **當三個音節都測完時，自動跳轉到 TrainmouthWidget**
-    if (_completedPhonemes.containsAll(["PA", "TA", "KA"])) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const TrainmouthWidget()),
-      );
-    }
+  // 顯示結果畫面
+  void _showResults(BuildContext context) {
+    // 計算總字數
+    int totalWordCount = completedPhonemes.values.reduce((a, b) => a + b);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetectionResultScreen(detectedWordCount: totalWordCount),
+      ),
+    );
   }
 
   @override
@@ -68,25 +63,47 @@ class _SpeechScreenState extends State<speech> {
     return Scaffold(
       body: Column(
         children: [
+          // 上方藍色標題區塊
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20), // 增加垂直間距
             color: Colors.blue[500]!,
             child: Row(
               children: [
-                Image.asset('assets/images/58.png', width: 50, height: 50),
+                // 左邊的圖示
+                Image.asset(
+                  'assets/images/58.png', // 你的圖片路徑
+                  width: 50,
+                  height: 50,
+                ),
                 const SizedBox(width: 10),
-                const Text(
-                  "訓練音節",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+                // 右邊的標題文字
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "訓練音節",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
+          // 主內容區塊
           Expanded(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Text(
+                    "請依序測試以下三個音節",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -97,10 +114,24 @@ class _SpeechScreenState extends State<speech> {
                       _buildPhonemeButton(context, "KA"),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
+                  // 顯示已完成的測試
                   Text(
-                    "已完成：${_completedPhonemes.length}/3",
-                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                    "已完成：${completedPhonemes.entries.where((e) => e.value > 0).map((e) => e.key).join(', ')}",
+                    style: TextStyle(fontSize: 18, color: Colors.blue[700]),
+                  ),
+                  const SizedBox(height: 20),
+                  // 顯示查看結果按鈕，只有在完成所有測試後才啟用
+                  ElevatedButton(
+                    onPressed: _allTestsCompleted()
+                        ? () => _showResults(context)
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    child: const Text("查看最終結果"),
                   ),
                 ],
               ),
@@ -112,29 +143,37 @@ class _SpeechScreenState extends State<speech> {
   }
 
   Widget _buildPhonemeButton(BuildContext context, String phoneme) {
-    bool isCompleted = _completedPhonemes.contains(phoneme);
+    // 已完成的按鈕使用不同顏色顯示
+    final bool isCompleted = completedPhonemes[phoneme]! > 0;
 
     return GestureDetector(
-      onTap: isCompleted ? null : () => _navigateToDetectionScreen(context, phoneme),
+      onTap: () => _navigateToDetectionScreen(context, phoneme),
       child: Container(
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          color: isCompleted ? Colors.grey : Colors.blue[300]!,
+          color: isCompleted ? Colors.green[300]! : Colors.blue[300]!,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 10,
               spreadRadius: 2,
-              offset: const Offset(2, 4),
+              offset: Offset(2, 4), // 陰影方向
             ),
           ],
         ),
         child: Center(
-          child: Text(
-            phoneme,
-            style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                phoneme,
+                style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              if (isCompleted)
+                Icon(Icons.check, color: Colors.white, size: 16),
+            ],
           ),
         ),
       ),
@@ -142,12 +181,16 @@ class _SpeechScreenState extends State<speech> {
   }
 }
 
-
 /// **第二個畫面：偵測聲音**
 class SoundDetectionScreen extends StatefulWidget {
   final String selectedPhoneme;
+  final Function(int) onComplete; // 新增回調函數，用於報告完成狀態
 
-  const SoundDetectionScreen({super.key, required this.selectedPhoneme});
+  const SoundDetectionScreen({
+    super.key,
+    required this.selectedPhoneme,
+    required this.onComplete,
+  });
 
   @override
   State<SoundDetectionScreen> createState() => _SoundDetectionScreenState();
@@ -169,7 +212,7 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
 
   // 倒數計時
   Timer? _countdownTimer;
-  int _remainingTime = 10; // 設定倒數 10 秒
+  int _remainingTime = 5; // 設定倒數 10 秒
 
   @override
   void initState() {
@@ -246,7 +289,7 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
       _wordCount = 0;
       _soundLevel = 0.0;
       _hasAddedWord = false;
-      _remainingTime = 10; // 重置倒數
+      _remainingTime = 5; // 重置倒數
     });
   }
 
@@ -260,20 +303,17 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
         });
       } else {
         timer.cancel();
-        _navigateToResultScreen();
+        _finishTest(); // 完成測試
       }
     });
   }
 
-  // 倒數結束後，跳轉到結果畫面
-  void _navigateToResultScreen() {
+  // 完成測試，返回上一畫面
+  void _finishTest() {
     _stopListening();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetectionResultScreen(detectedWordCount: _wordCount),
-      ),
-    );
+    // 回調通知完成了測試並傳遞字數
+    widget.onComplete(_wordCount);
+    Navigator.pop(context); // 返回上一畫面
   }
 
   // 計算顏色變化
@@ -287,6 +327,10 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("測試音節: ${widget.selectedPhoneme}"),
+        backgroundColor: Colors.blue[500],
+      ),
       body: Column(//內容垂直排列
         mainAxisAlignment: MainAxisAlignment.center,//內容置中對齊
         children: [
@@ -366,6 +410,11 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
             "倒數 $_remainingTime 秒...",
             style: const TextStyle(fontSize: 18, color: Colors.red),
           ),
+          const SizedBox(height: 10),
+          // Text(
+          //   "檢測到的音節數量: $_wordCount",
+          //   style: const TextStyle(fontSize: 18, color: Colors.blue),
+          // ),
           const Spacer(),
         ],
       ),
@@ -400,23 +449,40 @@ class DetectionResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
+      appBar: AppBar(
+        title: const Text("測試結果"),
+        backgroundColor: Colors.blue[500],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/images/58.png', width: 150),
             const SizedBox(height: 20),
-            Text(' $detectedWordCount 個字', style: const TextStyle(fontSize: 24, color: Colors.red)),
+            const Text(
+              "恭喜完成所有音節測試！",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 20),
+            Text(
+              '總共檢測到 $detectedWordCount 個音節',
+              style: const TextStyle(fontSize: 24, color: Colors.red),
+            ),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
-                await endout9(); // 确保 endout9() 執行完再返回
+                await endout9(totalWordCount: detectedWordCount); // 确保 endout9() 執行完再返回
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const TrainmouthWidget()),
                 ); // 重新加载 TrainmouthWidget
               },
-              child: const Text('返回'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
+              child: const Text('返回主畫面'),
             ),
           ],
         ),
@@ -424,7 +490,8 @@ class DetectionResultScreen extends StatelessWidget {
     );
   }
 }
-Future<void> endout9() async {
+
+Future<void> endout9({required int totalWordCount}) async {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd').format(now);
   var url;
@@ -440,6 +507,7 @@ Future<void> endout9() async {
     "parts": "吞嚥",
     "times": "1", //動作
     "coin_add": "5",
+    "total_word_count": totalWordCount.toString(),
   });
   if (responce.statusCode == 200) {
     print("ok");
