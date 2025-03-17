@@ -502,7 +502,8 @@ Future<void> endout9({required int totalWordCount}) async {
   final responce = await http.post(url,body:{
     "time": formattedDate,
     "account": FFAppState().accountnumber.toString(),
-    "action": FFAppState().mouth.toString(), //動作
+    // "action": FFAppState().mouth.toString(), //動作
+    "action": "${FFAppState().mouth.toString()} (${totalWordCount} 次)", // 動作 + 發音練習次數
     "degree": "初階",
     "parts": "吞嚥",
     "times": "1", //動作
