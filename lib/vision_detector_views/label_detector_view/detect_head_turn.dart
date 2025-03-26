@@ -29,6 +29,7 @@ class _PoseDetectorViewState extends State<head_turn> {
   CustomPaint? _customPaint;
   String? _text;
   Detector_head_turn Det = Detector_head_turn();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +39,9 @@ class _PoseDetectorViewState extends State<head_turn> {
   void dispose() async {
     _canProcess = false;
     _poseDetector.close();
+    Det.stopReminder();  // 使用 Det 物件的方法
+    Det.stopReminder2(); // 使用 Det 物件的方法
+    Det.player.clearAll();  // 清除所有音頻緩存
     super.dispose();
   }
 
@@ -296,7 +300,7 @@ class _PoseDetectorViewState extends State<head_turn> {
 
 class Detector_head_turn {
   int posetimecounter = 0; //復健動作持續秒數
-  int posetimeTarget = 5; //復健動作持續秒數目標
+  int posetimeTarget = 10; //復健動作持續秒數目標
   int posecounter = 0; //復健動作實作次數
   int poseTarget = 4; //目標次數設定
   bool startdDetector = false; //偵測

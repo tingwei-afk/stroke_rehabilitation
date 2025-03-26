@@ -13,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 List<CameraDescription> cameras = [];
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -156,31 +157,45 @@ class _MyAppState extends State<MyApp> {
         FlutterFlowTheme.saveThemeMode(mode);
       });
 
+
   @override
   Widget build(BuildContext context) {
     print(FFAppState().accountnumber);
     return ScreenUtilInit(
-        designSize: const Size(360, 780),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context , child) {
-    return MaterialApp.router(
-      title: 'test',
-      localizationsDelegates: [
-        FFLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      locale: _locale,
-      supportedLocales: const [Locale('en', '')],
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-      themeMode: _themeMode,
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
-          );
-        },
+      designSize: const Size(360, 780),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp.router(
+          title: 'test',
+          localizationsDelegates: [
+            FFLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: _locale,
+          supportedLocales: const [Locale('en', '')],
+          theme: ThemeData(brightness: Brightness.light),
+          darkTheme: ThemeData(brightness: Brightness.dark),
+          themeMode: _themeMode,
+          routeInformationParser: _router.routeInformationParser,
+          routerDelegate: _router.routerDelegate,
+          builder: (context, child) {
+            // 獲取原始 MediaQuery
+            final mediaQuery = MediaQuery.of(context);
+            // 返回固定文字縮放因子的 MediaQuery
+            return MediaQuery(
+              data: mediaQuery.copyWith(
+                textScaleFactor: 1.0, // 舊版API
+                // 如果使用新版API，可以用下面這行代替
+              ),
+              child: child!,
+            );
+          },
+        );
+      },
     );
   }
 }
+

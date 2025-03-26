@@ -54,38 +54,46 @@ class Detector_elbow_movement_left implements Detector_default{
 
   void poseDetector() {
     //偵測判定
-    if (this.startdDetector) {
-      DetectorED = true;
-      this.orderText = "請彎曲左臂";
-      if (this.posetimecounter == this.posetimeTarget) {
-        //秒數達成
-        this.startdDetector = false;
-        this.posecounter++;
-        this.posetimecounter = 0;
-        this.orderText = "達標!";
-        this.sounder(this.posecounter);
-        posesounder(true);
-      }
-      if (distance(posedata[22]!, posedata[23]!, posedata[30]!, posedata[31]!)<100
-          &&this.startdDetector) {
-        //每秒目標
-        this.posetimecounter++;
-        print(this.posetimecounter);
-        this.orderText = "請保持住!";
-      } else {
-        //沒有保持
-        this.posetimecounter = 0;
-      }
-    } else if (DetectorED) {
-      //預防空值被訪問
-      if (distance(posedata[22]!, posedata[23]!, posedata[30]!, posedata[31]!)>100) {
-        //確認復歸
-        this.startdDetector = true;
-        posesounder(false);
-      } else {
-        this.orderText = "請放下手臂";
-      }
-    }
+    double x1 =  posedata[15]!;
+    double x2 =  posedata[23]!;
+    double x3 =  posedata[40]!;
+    double y3 =  posedata[41]!;
+    double dist = yy(x1,x3);
+    print('計算距離:${dist.toStringAsFixed(2)}');
+
+
+    // if (this.startdDetector) {
+    //   DetectorED = true;
+    //   this.orderText = "請彎曲左臂";
+    //   if (this.posetimecounter == this.posetimeTarget) {
+    //     //秒數達成
+    //     this.startdDetector = false;
+    //     this.posecounter++;
+    //     this.posetimecounter = 0;
+    //     this.orderText = "達標!";
+    //     this.sounder(this.posecounter);
+    //     posesounder(true);
+    //   }
+    //   if (distance(posedata[22]!, posedata[23]!, posedata[30]!, posedata[31]!)<100
+    //       &&this.startdDetector) {
+    //     //每秒目標
+    //     this.posetimecounter++;
+    //     print(this.posetimecounter);
+    //     this.orderText = "請保持住!";
+    //   } else {
+    //     //沒有保持
+    //     this.posetimecounter = 0;
+    //   }
+    // } else if (DetectorED) {
+    //   //預防空值被訪問
+    //   if (distance(posedata[22]!, posedata[23]!, posedata[30]!, posedata[31]!)>100) {
+    //     //確認復歸
+    //     this.startdDetector = true;
+    //     posesounder(false);
+    //   } else {
+    //     this.orderText = "請放下手臂";
+    //   }
+    // }
   }
 
   void setStandpoint() {
@@ -102,7 +110,13 @@ class Detector_elbow_movement_left implements Detector_default{
       this.endDetector = true;
     }
   }
+  double yDistance(double x1,double y1,double x2,double y2){
+    return (y2 - y1).abs();
+  }
 
+  double yy(double x1,double x2){
+    return (x1 - x2);
+  }
   double distance(double x1,double y1,double x2,double y2){
     return sqrt(pow((x1-x2).abs(),2)+pow((y1-y2).abs(),2));
   }

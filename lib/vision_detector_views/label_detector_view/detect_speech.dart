@@ -411,10 +411,10 @@ class _SoundDetectionScreenState extends State<SoundDetectionScreen>
             style: const TextStyle(fontSize: 18, color: Colors.red),
           ),
           const SizedBox(height: 10),
-          // Text(
-          //   "檢測到的音節數量: $_wordCount",
-          //   style: const TextStyle(fontSize: 18, color: Colors.blue),
-          // ),
+          Text(
+            "音節數量: $_wordCount",
+            style: const TextStyle(fontSize: 18, color: Colors.blue),
+          ),
           const Spacer(),
         ],
       ),

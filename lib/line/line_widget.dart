@@ -36,6 +36,7 @@ class _LineWidgetState extends State<LineWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
+    final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -43,242 +44,185 @@ class _LineWidgetState extends State<LineWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child:Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.97,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBtnText,
+          // Remove the fixed height container and allow content to be scrollable
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // 主内容区域 - 绿色背景
+                Container(
+                  width: double.infinity,
+                  // Remove fixed height to allow proper scrolling
+                  height: screenSize.width * 1.7,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF99CBA2),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 1.0,
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF99CBA2),
-                        ),
-                        child: Column(
+                      // 标题栏 - 图标和标题
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
                           mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      15.0, 0.0, 0.0, 0.0),
-                                  child: Image.asset(
-                                    'assets/images/24.png',
-                                    width: 100.0,
-                                    height: 100.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      20.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    '諮詢社群',
-                                    textAlign: TextAlign.start,
-                                    style: FlutterFlowTheme.of(context)
-                                        .displaySmall
-                                        .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 50.0,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  15.0, 0.0, 0.0, 0.0),
+                              child: Image.asset(
+                                'assets/images/24.png',
+                                width: screenSize.width * 0.15,
+                                height: screenSize.width * 0.15,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(100, 150, 0, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    height: 200,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                                      borderRadius: BorderRadius.circular(0),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        await launchURL(
-                                            'https://liff.line.me/1645278921-kWRPP32q/?accountId=255szdhq');
-                                      },
-                                      child: Image.asset(
-                                        'assets/images/27.png',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                '諮詢社群',
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .displaySmall
+                                    .override(
+                                  fontFamily: 'Poppins',
+                                  fontSize: screenSize.width * 0.07,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.safePop();
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/17.jpg',
-                                    width: MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                    fit: BoxFit.cover,
-                                  ),
+
+                      // LINE按钮
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(20, 150, 20, 20), // Added bottom padding
+                        child: Center(
+                          child: Container(
+                            width: screenSize.width * 0.5,
+                            height: screenSize.width * 0.5,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await launchURL(
+                                    'https://liff.line.me/1645278921-kWRPP32q/?accountId=255szdhq');
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Image.asset(
+                                  'assets/images/27.png',
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.contain,
                                 ),
-                                Text(
-                                  '返回',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 25.0,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed('documental');
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/18.jpg',
-                                    width: MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Text(
-                                  '使用紀錄',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 25.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed('notice');
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/19.jpg',
-                                    width: MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Text(
-                                  '新通知',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 25.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed('about');
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/20.jpg',
-                                    width: MediaQuery.of(context).size.width * 0.2,
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Text(
-                                  '關於',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 25.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+
+                // 底部导航栏 - Remove nested SingleChildScrollView for bottom navigation
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 18),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/17.jpg',
+                            '返回',
+                            screenSize*1.5,
+                            onTap: () {
+                              Navigator.pop(context);
+                            }
+                        ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/18.jpg',
+                            '使用紀錄',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('documental');
+                            }
+                        ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/19.jpg',
+                            '新通知',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('notice');
+                            }
+                        ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/20.jpg',
+                            '關於',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('about');
+                            }
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+// 创建导航按钮的辅助方法
+  Widget _buildBottomNavItem(
+      BuildContext context,
+      String imagePath,
+      String label,
+      Size screenSize,
+      {VoidCallback? onTap}
+      ) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              imagePath,
+              width: screenSize.width * 0.17,
+              height: screenSize.width * 0.15,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Poppins',
+                fontSize: screenSize.width * 0.04,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

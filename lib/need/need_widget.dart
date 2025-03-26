@@ -38,6 +38,11 @@ class _NeedWidgetState extends State<NeedWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
+    final screenSize = MediaQuery.of(context).size;
+    // Calculate responsive values
+    final double iconSize = screenSize.width * 0.15;
+    final double fontSize = screenSize.width * 0.04;
+    final double cardButtonFontSize = screenSize.width < 400 ? 20.0 : 30.0;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -45,595 +50,341 @@ class _NeedWidgetState extends State<NeedWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-          Expanded(
-           child:   Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.97,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).primaryBtnText,
+          // Use SingleChildScrollView to wrap the entire content including navigation
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // Main content container
+                Container(
+                  width: double.infinity,
+                  color: Color(0xFFFFC1A1),
+
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header with title
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  15.0, 0.0, 0.0, 0.0),
+                              child: Image.asset(
+                                'assets/images/00.png',
+                                width: iconSize,
+                                height: iconSize,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                '需求表達',
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .displaySmall
+                                    .override(
+                                  fontFamily: 'Poppins',
+                                  fontSize: fontSize * 1.8,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Grid layout
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: GridView.count(
+                          crossAxisCount: screenSize.width < 600 ? 2 : 4,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 15,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            _buildGridItem(
+                                context,
+                                'assets/images/01.png',
+                                '肚子餓',
+                                onTap: () async {
+                                  player.play('audios/5.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/02.png',
+                                '口渴',
+                                onTap: () async {
+                                  player.play('audios/2.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/03.png',
+                                '小號',
+                                onTap: () async {
+                                  player.play('audios/4.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/04.png',
+                                '大號',
+                                onTap: () async {
+                                  player.play('audios/3.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/05.png',
+                                '換尿布',
+                                onTap: () async {
+                                  player.play('audios/8.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/06.png',
+                                '翻身',
+                                onTap: () async {
+                                  player.play('audios/12.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/07.png',
+                                '很熱',
+                                onTap: () async {
+                                  player.play('audios/7.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/10.png',
+                                '頭痛',
+                                onTap: () async {
+                                  player.play('audios/10.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/08.png',
+                                '很冷',
+                                onTap: () async {
+                                  player.play('audios/6.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/11.png',
+                                '腹痛身',
+                                onTap: () async {
+                                  player.play('audios/9.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/12.png',
+                                '下床',
+                                onTap: () async {
+                                  player.play('audios/1.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                            _buildGridItem(
+                                context,
+                                'assets/images/09.png',
+                                '頭暈',
+                                onTap: () async {
+                                  player.play('audios/11.mp3');
+                                },
+                                constraints: BoxConstraints(maxWidth: screenSize.width),
+                                fontSize: cardButtonFontSize
+                            ),
+                          ],
+
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFC1A1),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    15.0, 0.0, 0.0, 0.0),
-                                child: Image.asset(
-                                  'assets/images/00.png',
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    20.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  '需求表達',
-                                  textAlign: TextAlign.start,
-                                  style: FlutterFlowTheme.of(context)
-                                      .displaySmall
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 50.0,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 20.0, 0.0, 0.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10.0, 0.0, 0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          player.play('audios/5.mp3');
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/01.png',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          height: 130.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '肚子餓',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 10.0, 0.0, 0.0),
-                                        child: InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            player.play('audios/3.mp3');
-                                          },
-                                          child: Image.asset(
-                                            'assets/images/04.png',
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
-                                            height: 130.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '大號',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10.0, 0.0, 0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          player.play('audios/2.mp3');
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/02.png',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          height: 130.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '口渴',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 10.0, 0.0, 0.0),
-                                        child: InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            player.play('audios/8.mp3');
-                                          },
-                                          child: Image.asset(
-                                            'assets/images/05.png',
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
-                                            height: 130.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '換尿布',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10.0, 0.0, 0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          player.play('audios/4.mp3');
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/03.png',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          height: 130.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '小號',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 10.0, 0.0, 0.0),
-                                        child: InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            player.play('audios/12.mp3');
-                                          },
-                                          child: Image.asset(
-                                            'assets/images/06.png',
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
-                                            height: 130.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                        },
-                                        text: '翻身',
-                                        options: FFButtonOptions(
-                                          width: 100.0,
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .displaySmall
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 30.0,
-                                                  ),
-                                          elevation: 2.0,
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 30.0, 0.0, 0.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed('need2');
-                              },
-                              text: '下一頁',
-                              options: FFButtonOptions(
-                                width: 250.0,
-                                height: 60.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: Color(0xFFCB5624),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                      fontSize: 50.0,
-                                    ),
-                                elevation: 2.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+
+                // Bottom navigation - now included within the SingleChildScrollView
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 18),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('home');
-                                },
-                                child: Image.asset(
-                                  'assets/images/17.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '返回',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/17.jpg',
+                            '返回',
+                            screenSize*1.5,
+                            onTap: () {
+                              Navigator.pop(context);
+                            }
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('documental');
-                                },
-                                child: Image.asset(
-                                  'assets/images/18.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '使用紀錄',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/18.jpg',
+                            '使用紀錄',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('documental');
+                            }
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('notice');
-                                },
-                                child: Image.asset(
-                                  'assets/images/19.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '新通知',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/19.jpg',
+                            '新通知',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('notice');
+                            }
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('about');
-                                },
-                                child: Image.asset(
-                                  'assets/images/20.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '關於',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
+                        _buildBottomNavItem(
+                            context,
+                            'assets/images/20.jpg',
+                            '關於',
+                            screenSize*1.5,
+                            onTap: () {
+                              context.pushNamed('about');
+                            }
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              ),
-            ],
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+// Helper method to build grid items
+  Widget _buildGridItem(
+      BuildContext context,
+      String imagePath,
+      String label,
+      {required VoidCallback onTap,
+        required BoxConstraints constraints,
+        required double fontSize}
+      ) {
+    final double itemWidth = constraints.maxWidth * 0.25;
+    final double imageHeight = constraints.maxHeight * 0.12;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: onTap,
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: itemWidth,
+              maxHeight: imageHeight,
+            ),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        SizedBox(height: 8),
+        FFButtonWidget(
+          onPressed: () {
+            print('Button pressed ...');
+          },
+          text: label,
+          options: FFButtonOptions(
+            width: itemWidth,
+            height: 40.0,
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+            iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+            color: FlutterFlowTheme.of(context).primaryBtnText,
+            textStyle: FlutterFlowTheme.of(context).displaySmall.override(
+              fontFamily: 'Poppins',
+              fontSize: fontSize,
+            ),
+            elevation: 2.0,
+            borderSide: BorderSide(
+              color: FlutterFlowTheme.of(context).primaryBtnText,
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+      ],
+    );
+  }
+
+// 创建导航按钮的辅助方法
+  Widget _buildBottomNavItem(
+      BuildContext context,
+      String imagePath,
+      String label,
+      Size screenSize,
+      {VoidCallback? onTap}
+      ) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              imagePath,
+              width: screenSize.width * 0.17,
+              height: screenSize.width * 0.15,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Poppins',
+                fontSize: screenSize.width * 0.04,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
