@@ -63,13 +63,12 @@ class _NoticeWidgetState extends State<NoticeWidget> {
         key: scaffoldKey,
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child:Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.97,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  // width: screenSize.width,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -77,8 +76,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width * 1.0,
-                        height: MediaQuery.of(context).size.height * 0.8,
+                        height: screenSize.width * 1.7,
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).secondaryBackground,
                         ),
@@ -191,8 +189,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                                 ),
                               ),
                               Container(
-                                width: double.infinity,
-                                height: MediaQuery.of(context).size.height * 0.66,
+                                height: screenSize.height * 0.6, // 考慮設備比例
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context).secondaryBackground,
                                 ),
@@ -267,8 +264,9 @@ class _NoticeWidgetState extends State<NoticeWidget> {
                     ],
                   ),
                 ),
-              ),
-            ],
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -308,8 +306,6 @@ class _NoticeWidgetState extends State<NoticeWidget> {
       ),
     );
   }
-
-
 }
 class Items extends StatefulWidget {
 

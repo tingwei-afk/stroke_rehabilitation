@@ -53,7 +53,7 @@ class _DocumentalWidgetState extends State<DocumentalWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
-
+    final screenSize = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -61,316 +61,254 @@ class _DocumentalWidgetState extends State<DocumentalWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-          Expanded(
-              child:Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.97,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16.0, 12.0, 8.0, 0.0),
-                                      child: Container(
-                                        width: 5.0,
-                                        child: TextFormField(
-                                          controller:
-                                              _model.searchBarController,
-                                          obscureText: false,
-                                          decoration: InputDecoration(
-                                            labelStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      fontSize: 25.0,
-                                                    ),
-                                            hintText: '請輸入訓練動作',
-                                            hintStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      fontSize: 20.0,
-                                                    ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .lineColor,
-                                                width: 2.0,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  width: screenSize.width,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        height: screenSize.width * 1.7,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        child: Padding(
+                          padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16.0, 12.0, 8.0, 0.0),
+                                        child: Container(
+                                          width: 5.0,
+                                          child: TextFormField(
+                                            controller:
+                                            _model.searchBarController,
+                                            obscureText: false,
+                                            decoration: InputDecoration(
+                                              labelStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall
+                                                  .override(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 25.0,
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 2.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 2.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 2.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
-                                            filled: true,
-                                            fillColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primaryBackground,
-                                            contentPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    24.0, 24.0, 20.0, 24.0),
-                                          ),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
+                                              hintText: '請輸入訓練動作',
+                                              hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall
+                                                  .override(
                                                 fontFamily: 'Poppins',
                                                 fontSize: 20.0,
                                               ),
-                                          validator: _model
-                                              .searchBarControllerValidator
-                                              .asValidator(context),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .lineColor,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(12.0),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(12.0),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(12.0),
+                                              ),
+                                              focusedErrorBorder:
+                                              OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(12.0),
+                                              ),
+                                              filled: true,
+                                              fillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primaryBackground,
+                                              contentPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24.0, 24.0, 20.0, 24.0),
+                                            ),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20.0,
+                                            ),
+                                            validator: _model
+                                                .searchBarControllerValidator
+                                                .asValidator(context),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 12.0, 12.0, 0.0),
-                                    child: FlutterFlowIconButton(
-                                      borderColor: Colors.transparent,
-                                      borderRadius: 30.0,
-                                      borderWidth: 1.0,
-                                      buttonSize: 50.0,
-                                      icon: Icon(
-                                        Icons.search_sharp,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 30.0,
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 12.0, 12.0, 0.0),
+                                      child: FlutterFlowIconButton(
+                                        borderColor: Colors.transparent,
+                                        borderRadius: 30.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 50.0,
+                                        icon: Icon(
+                                          Icons.search_sharp,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 30.0,
+                                        ),
+                                        onPressed: () {
+                                          print('IconButton pressed ...');
+                                        },
                                       ),
-                                      onPressed: () {
-                                        print('IconButton pressed ...');
-                                      },
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height * 0.66,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).secondaryBackground,
+                              Container(
+                                height: screenSize.height * 0.6, // 考慮設備比例
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
 
+                                ),
+                                child:FutureBuilder<List>(
+                                  future: getData(),
+                                  builder: (ctx,ss) {
+                                    if(ss.hasError){
+                                      print("error");
+                                    }
+                                    if(ss.hasData){
+                                      return Items(list:ss.data);
+                                    }
+                                    else{
+                                      return CircularProgressIndicator();
+                                    }
+                                  },
+                                ),
                               ),
-                              child:FutureBuilder<List>(
-                                future: getData(),
-                                builder: (ctx,ss) {
-                                  if(ss.hasError){
-                                    print("error");
-                                  }
-                                  if(ss.hasData){
-                                    return Items(list:ss.data);
-                                  }
-                                  else{
-                                    return CircularProgressIndicator();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 18),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.safePop();
-                                },
-                                child: Image.asset(
+                              _buildBottomNavItem(
+                                  context,
                                   'assets/images/17.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
+                                  '返回',
+                                  screenSize*1.5,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  }
                               ),
-                              Text(
-                                '返回',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('documental');
-                                },
-                                child: Image.asset(
+                              _buildBottomNavItem(
+                                  context,
                                   'assets/images/18.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
+                                  '使用紀錄',
+                                  screenSize*1.5,
+                                  onTap: () {
+                                    context.pushNamed('documental');
+                                  }
                               ),
-                              Text(
-                                '使用紀錄',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('notice');
-                                },
-                                child: Image.asset(
+                              _buildBottomNavItem(
+                                  context,
                                   'assets/images/19.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
+                                  '新通知',
+                                  screenSize*1.5,
+                                  onTap: () {
+                                    context.pushNamed('notice');
+                                  }
                               ),
-                              Text(
-                                '新通知',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('about');
-                                },
-                                child: Image.asset(
+                              _buildBottomNavItem(
+                                  context,
                                   'assets/images/20.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '關於',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
+                                  '關於',
+                                  screenSize*1.5,
+                                  onTap: () {
+                                    context.pushNamed('about');
+                                  }
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+
+              ],
             ),
-            ],
           ),
+        ),
+      ),
+    );
+  }
+  Widget _buildBottomNavItem(
+      BuildContext context,
+      String imagePath,
+      String label,
+      Size screenSize,
+      {VoidCallback? onTap}
+      ) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              imagePath,
+              width: screenSize.width * 0.17,
+              height: screenSize.width * 0.15,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Poppins',
+                fontSize: screenSize.width * 0.04,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
