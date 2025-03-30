@@ -9,6 +9,7 @@ export 'detect_headneck_bend.dart';
 export 'detect_speech.dart';
 export 'detect_head_turn.dart';
 export 'Shoulder_activities.dart';
+export 'Salivary_gland_massage.dart';
 /*
    tongue吐舌
    pursed_lips抿唇

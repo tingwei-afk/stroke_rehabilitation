@@ -103,7 +103,7 @@ class _NeedWidgetState extends State<NeedWidget> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: GridView.count(
-                          crossAxisCount: screenSize.width < 600 ? 2 : 4,
+                          crossAxisCount: screenSize.width < 600 ? 2 : 5,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 15,
                           shrinkWrap: true,
@@ -181,20 +181,20 @@ class _NeedWidgetState extends State<NeedWidget> {
                             ),
                             _buildGridItem(
                                 context,
-                                'assets/images/10.png',
-                                '頭痛',
+                                'assets/images/08.png',
+                                '很冷',
                                 onTap: () async {
-                                  player.play('audios/10.mp3');
+                                  player.play('audios/6.mp3');
                                 },
                                 constraints: BoxConstraints(maxWidth: screenSize.width),
                                 fontSize: cardButtonFontSize
                             ),
                             _buildGridItem(
                                 context,
-                                'assets/images/08.png',
-                                '很冷',
+                                'assets/images/10.png',
+                                '頭痛',
                                 onTap: () async {
-                                  player.play('audios/6.mp3');
+                                  player.play('audios/10.mp3');
                                 },
                                 constraints: BoxConstraints(maxWidth: screenSize.width),
                                 fontSize: cardButtonFontSize

@@ -87,66 +87,73 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
     gettime1=dateTimeFormat('yyyy-M-d', gettime);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-          Expanded(
-              child:Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.97,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF90BDF9),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+              Container(
+              width: double.infinity,
+              constraints: BoxConstraints(
+                minHeight: screenHeight * 0.9,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight * 0.75,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF90BDF9),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 10.0, 0.0, 0.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    15.0, 0.0, 0.0, 0.0),
                                 child: Image.asset(
                                   'assets/images/14.png',
-                                  width: 100.0,
-                                  height: 90.0,
+                                  width: screenSize.width * 0.15,
+                                  height: screenSize.width * 0.15,
                                   fit: BoxFit.contain,
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    20.0, 10.0, 0.0, 0.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    20.0, 0.0, 0.0, 0.0),
                                 child: Text(
                                   '進階訓練',
                                   textAlign: TextAlign.start,
                                   style: FlutterFlowTheme.of(context)
                                       .displaySmall
                                       .override(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 50.0,
-                                      ),
+                                    fontFamily: 'Poppins',
+                                    fontSize: screenSize.width * 0.08,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+                        ),
                           Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -178,8 +185,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/34.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -189,7 +196,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
+                                              fontSize: screenSize.width * 0.08,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -217,8 +225,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/40.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -228,8 +236,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
-                                              fontWeight: FontWeight.w600,
+                                          fontSize: screenSize.width * 0.08,
+                                          fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -264,8 +272,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/41.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -275,7 +283,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
+                                          fontSize: screenSize.width * 0.08,
+                                          fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -303,8 +312,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/37.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -314,8 +323,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
-                                              fontWeight: FontWeight.w600,
+                                          fontSize: screenSize.width * 0.08,
+                                          fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -350,8 +359,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/42.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -361,7 +370,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
+                                          fontSize: screenSize.width * 0.08,
+                                          fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -389,8 +399,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                         },
                                         child: Image.asset(
                                           'assets/images/52.png',
-                                          width: 120.0,
-                                          height: 120.0,
+                                          width: screenSize.width * 0.35,
+                                          height: screenSize.width * 0.35,
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -400,8 +410,8 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Poppins',
-                                              fontSize: 28.0,
-                                              fontWeight: FontWeight.w600,
+                                          fontSize: screenSize.width * 0.08,
+                                          fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -413,156 +423,99 @@ class _Trainlowerbody2WidgetState extends State<Trainlowerbody2Widget> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.safePop();
-                                },
-                                child: Image.asset(
-                                  'assets/images/17.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '返回',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 18),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildBottomNavItem(
+                              context,
+                              'assets/images/17.jpg',
+                              '返回',
+                              screenSize*1.5,
+                              onTap: () {
+                                Navigator.pop(context);
+                              }
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('documental');
-                                },
-                                child: Image.asset(
-                                  'assets/images/18.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '使用紀錄',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
+                          _buildBottomNavItem(
+                              context,
+                              'assets/images/18.jpg',
+                              '使用紀錄',
+                              screenSize*1.5,
+                              onTap: () {
+                                context.pushNamed('documental');
+                              }
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('notice');
-                                },
-                                child: Image.asset(
-                                  'assets/images/19.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '新通知',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
+                          _buildBottomNavItem(
+                              context,
+                              'assets/images/19.jpg',
+                              '新通知',
+                              screenSize*1.5,
+                              onTap: () {
+                                context.pushNamed('notice');
+                              }
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('about');
-                                },
-                                child: Image.asset(
-                                  'assets/images/20.jpg',
-                                  width: MediaQuery.of(context).size.width * 0.2,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Text(
-                                '關於',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 25.0,
-                                    ),
-                              ),
-                            ],
+                          _buildBottomNavItem(
+                              context,
+                              'assets/images/20.jpg',
+                              '關於',
+                              screenSize*1.5,
+                              onTap: () {
+                                context.pushNamed('about');
+                              }
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                  ),
                   ],
                 ),
               ),
-          ),
+
             ],
           ),
         ),
       ),
+      ),
     );
   }
 }
+Widget _buildBottomNavItem(
+    BuildContext context,
+    String imagePath,
+    String label,
+    Size screenSize,
+    {VoidCallback? onTap}
+    ) {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+    child: InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            imagePath,
+            width: screenSize.width * 0.17,
+            height: screenSize.width * 0.15,
+            fit: BoxFit.contain,
+          ),
+          SizedBox(height: 4),
+          Text(
+            label,
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+              fontFamily: 'Poppins',
+              fontSize: screenSize.width * 0.04,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+

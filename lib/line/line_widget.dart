@@ -53,7 +53,6 @@ class _LineWidgetState extends State<LineWidget> {
                 // 主内容区域 - 绿色背景
                 Container(
                   width: double.infinity,
-                  // Remove fixed height to allow proper scrolling
                   height: screenSize.width * 1.7,
                   decoration: const BoxDecoration(
                     color: Color(0xFF99CBA2),
@@ -89,7 +88,7 @@ class _LineWidgetState extends State<LineWidget> {
                                     .displaySmall
                                     .override(
                                   fontFamily: 'Poppins',
-                                  fontSize: screenSize.width * 0.07,
+                                  fontSize: screenSize.width * 0.08,
                                 ),
                               ),
                             ),
