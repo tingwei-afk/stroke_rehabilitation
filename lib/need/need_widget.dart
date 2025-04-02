@@ -103,7 +103,7 @@ class _NeedWidgetState extends State<NeedWidget> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: GridView.count(
-                          crossAxisCount: screenSize.width < 600 ? 2 : 5,
+                          crossAxisCount: screenSize.width < 600 ? 2 : 3,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 15,
                           shrinkWrap: true,

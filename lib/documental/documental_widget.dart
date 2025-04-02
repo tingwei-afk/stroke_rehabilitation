@@ -367,26 +367,45 @@ class Items extends StatelessWidget {
           ? divider5
           : divider6;
     }
+// 獲取螢幕尺寸
+    final screenSize = MediaQuery.of(context).size;
+
     return ListView.separated(
-      itemCount: list!.length,  //列表的數量
-      itemBuilder: (ctx,i){    //列表的構建器
+      itemCount: list!.length,  // 列表的數量
+      padding: EdgeInsets.symmetric(
+        vertical: screenSize.width * 0.02,
+        horizontal: screenSize.width * 0.03, // 根據螢幕寬度的比例設置內邊距
+      ),
+      itemBuilder: (ctx, i) {    // 列表的構建器
         return ListTile(
-          leading: Icon(Icons.message,
-            size: 30,
+          leading: Container(
+            width: screenSize.width * 0.08,  // 圖標容器寬度為螢幕寬度的8%
+            height: screenSize.width * 0.08,  // 保持正方形比例
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.message,
+              size: screenSize.width * 0.05,  // 圖標大小為螢幕寬度的5%
+            ),
           ),
-          title: Text(list![i]['degree']+'  '+list![i]['parts']+'  '+list![i]['action'],
+          title: Text(
+            list![i]['degree'] + '  ' + list![i]['parts'] + '  ' + list![i]['action'],
             textAlign: TextAlign.start,
             style: FlutterFlowTheme.of(context).headlineSmall.override(
               fontFamily: 'Poppins',
-              fontSize: 25,
+              fontSize: screenSize.width * 0.04,  // 標題字體大小為螢幕寬度的4%
             ),
           ),
-          subtitle: Text(list![i]['time'],
+          subtitle: Text(
+            list![i]['time'],
             textAlign: TextAlign.start,
             style: FlutterFlowTheme.of(context).titleSmall.override(
               fontFamily: 'Poppins',
-              fontSize: 19,
+              fontSize: screenSize.width * 0.03,  // 副標題字體大小為螢幕寬度的3%
             ),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: screenSize.width * 0.03,
+            vertical: screenSize.width * 0.02,
           ),
         );
       },
