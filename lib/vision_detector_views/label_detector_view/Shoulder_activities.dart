@@ -56,6 +56,25 @@ class _PoseDetectorViewState extends State<Shoulder_activities> {
             processImage(inputImage);
           },
         ),
+        Positioned(
+          top:170,  // 根據你的UI調整位置
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: Color.fromARGB(180, 255, 190, 52), width: 3),
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.face,
+                size: 50,
+                color: Color.fromARGB(120, 255, 190, 52),
+              ),
+            ),
+          ),
+        ),
         if (!Det.changeUI) ...[
           Positioned(
             //倒數計時

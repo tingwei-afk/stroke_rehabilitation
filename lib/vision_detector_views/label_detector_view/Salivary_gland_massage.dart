@@ -60,6 +60,26 @@ class _PoseDetectorViewState extends State<Salivary_gland_massage> {
             processImage(inputImage);
           },
         ),
+
+        Positioned(
+          top:170,  // 根據你的UI調整位置
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: Color.fromARGB(180, 255, 190, 52), width: 3),
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.face,
+                size: 50,
+                color: Color.fromARGB(120, 255, 190, 52),
+              ),
+            ),
+          ),
+        ),
         if (!Det.changeUI) ...[
           Positioned(
             //倒數計時
@@ -302,7 +322,7 @@ class _PoseDetectorViewState extends State<Salivary_gland_massage> {
 class salivary_gland_massage {
   static const double THRESHOLD = 50000; // 距離閾值
   int posetimecounter = 0; //復健動作持續秒數
-  int posetimeTarget = 10; //復健動作持續秒數目標
+  int posetimeTarget = 3; //復健動作持續秒數目標
   int posecounter = 0; //復健動作實作次數
   int poseTarget = 10; //目標次數設定
   bool startdDetector = false; //偵測
@@ -326,6 +346,13 @@ class salivary_gland_massage {
   Timer? reminderTimer; // 用于定时提示
   Timer? reminderTimer2; // 用於定時提示
   Timer? reminderTimer3; // 用於定時提示
+  List<double> noseZHistory = [];
+  List<double> leftHandZHistory = [];
+  List<double> rightHandZHistory = [];
+  int poseStage = 0; // 跟踪动作阶段
+  double? initialY; // 记录初始Y位置
+  double? initialRightHandY; // 右手初始Y坐标
+  double? initialLeftHandY;  // 左手初始Y坐标
 
 
   void startd(){//倒數計時
@@ -359,77 +386,199 @@ class salivary_gland_massage {
     // startReminder3();
   }
 
+
+  // void poseDetector() {
+  //   double midY = (posedata[19]! + posedata[23]!) / 2;
+  //   double midY2 = (posedata[21]! + posedata[25]!) / 2;
+  //
+  //   // 计算右手和左手的Y坐标
+  //   double rightHandY = (posedata[38]! + posedata[39]!) / 2; // 右手Y坐标
+  //   double leftHandY = (posedata[40]! + posedata[41]!) / 2; // 左手Y坐标
+  //
+  //   if (this.endDetector) {
+  //     // stopReminder(); // 如果已结束检测，停止提醒
+  //     return;
+  //   }
+  //
+  //   bool DetectorED =
+  //       ddistance(posedata[38]!, posedata[39]!, posedata[18]!, midY) < THRESHOLD // 右手接近脖子上下
+  //           && ddistance(posedata[40]!, posedata[41]!, posedata[20]!, midY2) < THRESHOLD; // 左手接近脖子上下
+  //
+  //   if (this.startdDetector) {
+  //     if (this.poseStage == 0) {
+  //       // 预备动作 - 手放脖子
+  //       this.orderText = "手請放脖子";
+  //
+  //       if (DetectorED && this.startdDetector) {
+  //         this.orderText = "開始按摩";
+  //         this.poseStage = 1; // 直接进入震动阶段
+  //
+  //         // 记录双手的初始Y位置
+  //         if (this.initialRightHandY == null) {
+  //           this.initialRightHandY = rightHandY; // 记录右手初始Y位置
+  //         }
+  //         if (this.initialLeftHandY == null) {
+  //           this.initialLeftHandY = leftHandY; // 记录左手初始Y位置
+  //         }
+  //
+  //         this.sounder(0); // 提示音
+  //       }
+  //     }
+  //     else if (this.poseStage == 1) {
+  //       // 震动阶段 - 检测双手Y轴震动
+  //       double rightHandDiff = (rightHandY - this.initialRightHandY!).abs();
+  //       double leftHandDiff = (leftHandY - this.initialLeftHandY!).abs();
+  //
+  //       // 检测双手是否都有足够的震动
+  //       if (rightHandDiff >= 10 && leftHandDiff >= 10) {
+  //         // this.orderText = "已偵測到雙手震動";
+  //         this.sounder(1); // 提示音
+  //         this.poseStage = 2; // 进入返回起始位置阶段
+  //       } else {
+  //         // this.orderText = "請震動雙手 (右手:${rightHandDiff.toInt()}/10, 左手:${leftHandDiff.toInt()}/10)";
+  //       }
+  //     }
+  //     else if (this.poseStage == 2) {
+  //       // 返回起始位置阶段
+  //       double rightHandDiff = (rightHandY - this.initialRightHandY!).abs();
+  //       double leftHandDiff = (leftHandY - this.initialLeftHandY!).abs();
+  //
+  //       // 检测双手是否都回到初始位置
+  //       if (rightHandDiff < 30 && leftHandDiff < 30) { // 回到起始位置附近（允许6像素误差）
+  //         this.startdDetector = false;
+  //         this.posecounter++;
+  //         this.poseStage = 0; // 重置为预备阶段
+  //         this.orderText = "達標!";
+  //         this.sounder(this.posecounter);
+  //         this.right_side = false;
+  //         // startReminder();
+  //       } else {
+  //         this.orderText = "請回到起始位置 (右手差距:${rightHandDiff.toInt()}, 左手差距:${leftHandDiff.toInt()})";
+  //       }
+  //     }
+  //
+  //   } else if (DetectorED) {
+  //     this.startdDetector = true;
+  //     this.poseStage = 0; // 确保从预备阶段开始
+  //     // posesounder(false);
+  //   }
+  // }
+
+
+
+  // void poseDetector() {
+  //   double midY = (posedata[19]! + posedata[23]!) / 2;
+  //   double midY2 = (posedata[21]! + posedata[25]!) / 2;
+  //
+  //   if (this.endDetector) {
+  //     // stopReminder(); // 如果已结束检测，停止提醒
+  //     return;
+  //   }
+  //
+  //   bool DetectorED =
+  //       ddistance(posedata[38]!, posedata[39]!, posedata[18]!, midY) < THRESHOLD // 右手接近脖子上下
+  //           && ddistance(posedata[40]!, posedata[41]!, posedata[20]!, midY2) < THRESHOLD; // 左手接近脖子上下
+  //
+  //   if (this.startdDetector) {
+  //     if (this.poseStage == 0) {
+  //       // 预备动作 - 手放脖子
+  //       this.orderText = "手請放脖子";
+  //
+  //       if (DetectorED && this.startdDetector) {
+  //         this.orderText = "開始按摩";
+  //         this.poseStage = 1; // 直接进入震动阶段
+  //         this.initialY = midY; // 记录起始Y位置
+  //         this.sounder(0); // 提示音
+  //       }
+  //     }
+  //     else if (this.poseStage == 1) {
+  //       // 震动阶段 - 检测Y轴震动5像素
+  //       double currentY = midY;
+  //
+  //       if ((currentY - this.initialY!).abs() >= 10) { // Y轴震动5像素
+  //         // this.orderText = "已偵測到震動";
+  //         this.sounder(1); // 提示音
+  //         this.poseStage = 2; // 进入返回起始位置阶段
+  //       } else {
+  //         // this.orderText = "請震動頸部 (${(currentY - this.initialY!).abs().toInt()}/10)";
+  //       }
+  //     }
+  //     else if (this.poseStage == 2) {
+  //       // 返回起始位置阶段
+  //       double currentY = midY;
+  //
+  //       if ((currentY - this.initialY!).abs() < 6) { // 回到起始位置附近（允许3像素误差）
+  //         this.startdDetector = false;
+  //         this.posecounter++;
+  //         this.poseStage = 0; // 重置为预备阶段
+  //         this.orderText = "達標!";
+  //         this.sounder(this.posecounter);
+  //         this.right_side = false;
+  //         // startReminder();
+  //       } else {
+  //         this.orderText = "請回到起始位置 (差距:${(currentY - this.initialY!).abs().toInt()})";
+  //       }
+  //     }
+  //
+  //   } else if (DetectorED) {
+  //     this.startdDetector = true;
+  //     this.poseStage = 0; // 确保从预备阶段开始
+  //     // posesounder(false);
+  //   }
+  // }
+
+
   void poseDetector() {
-
-  double midY = (posedata[19]! + posedata[23]! ) / 2;
-  double midY2 = (posedata[21]! + posedata[25]! ) / 2;
-
-  double distance1 = distance(posedata[38]!, posedata[39]!, posedata[18]!, midY);
-  double distance2 = distance(posedata[40]!, posedata[41]!, posedata[20]!, midY2);
-  print("左手手指與攝影機的距離: ${distance1.toStringAsFixed(2)} ");
-  print("右手手指與攝影機的距離: ${distance2.toStringAsFixed(2)} ");
-
+    double midY = (posedata[19]! + posedata[23]!) / 2;
+    double midY2 = (posedata[21]! + posedata[25]!) / 2;
+    double rightHandY = posedata[39]!;
+    double leftHandY = posedata[41]!;
 
     if (this.endDetector) {
       // stopReminder(); // 如果已结束检测，停止提醒
       return;
     }
+
+    bool DetectorED =
+        ddistance(posedata[38]!, posedata[39]!, posedata[18]!, midY) < THRESHOLD // 右手接近脖子上下
+            && ddistance(posedata[40]!, posedata[41]!, posedata[20]!, midY2) < THRESHOLD; // 左手接近脖子上下
+
     if (this.startdDetector) {
-      DetectorED = true;
-        this.orderText = "請向右轉頭";
-        if (this.posetimecounter == this.posetimeTarget) {
-          //秒數達成
-          this.startdDetector = false;
-          this.posecounter++;
-          this.posetimecounter = 0;
-          this.orderText = "達標!";
-          this.sounder(this.posecounter);
-          this.right_side = false;
-          // startReminder();
-          // sound = false;
+      if (this.poseStage == 0) {
+        // 预备动作 - 将手放在指定位置
+        this.orderText = "請將雙手放在指定位置";
+        if (DetectorED && this.startdDetector) {
+          this.orderText = "開始上下移動雙手";
+          this.poseStage = 1; // 进入移动阶段
+          this.initialY = (rightHandY + leftHandY) / 2; // 记录起始Y位置
+          this.sounder(0); // 提示音
         }
-
-      if (distance(posedata[38]!, posedata[39]!, posedata[18]!, midY) < THRESHOLD // 右手接近脖子
-          && distance(posedata[40]!, posedata[41]!, posedata[20]!, midY2) < THRESHOLD // 左手接近脖子
-          && this.startdDetector) {
-          //每秒目標
-          this.posetimecounter++;
-          print(this.posetimecounter);
-          this.orderText = "請保持住!";
-          // sound = true;
-          // stopReminder();
-        }
-        else {
-          //沒有保持
-          this.posetimecounter = 0;
-
-        }
-
-    }else if (DetectorED) {
-      //預防空值被訪問
-      if (posedata[25]! > (this.Standpoint_Y!) && posedata[23]! > (this.Standpoint_Y!))
-      {
-        //確認復歸
-        this.startdDetector = true;
-        // posesounder(false);
-      } else {
-        this.orderText = "請面對前方";
       }
+      else if (this.poseStage == 1) {
+        // 检测手部的Y轴移动
+        double currentY = (rightHandY + leftHandY) / 2;
+
+        // 在指定区域内移动
+        if (DetectorED) {
+          // 检测是否有足够的移动
+          if ((currentY - this.initialY!).abs() >= 30) {
+            // 记录当前完成一次移动
+            this.posecounter++;
+            this.orderText = "做得好! 已完成${this.posecounter}次";
+            this.sounder(this.posecounter);
+
+            // 更新初始位置为当前位置，继续检测下一次移动
+            this.initialY = currentY;
+          }
+        } else {
+          // 如果手不在指定位置，提示用户
+          this.orderText = "請保持雙手在正確位置";
+        }
+      }
+    } else if (DetectorED) {
+      this.startdDetector = true;
+      this.poseStage = 0; // 确保从预备阶段开始
     }
-  }
-  // double calculateDistance(double noseZ) {
-  //   // 這個公式可以根據你的相機進行校正
-  //   double focalLength = 500.0; // 你可能需要調整這個值
-  //   double realNoseSize = 5.0; // 假設鼻子的寬度約 5cm
-  //   return noseZ.abs() + 900;
-  // }
-  double calculateDistance1(double rightIndexZ) {
-    return rightIndexZ.abs();
-  }
-  double movingAverage(List<double> depthValues) {
-    if (depthValues.isEmpty) return 0.0;
-    double sum = depthValues.fold(0.0, (prev, value) => prev + value);
-    return sum / depthValues.length;
   }
 
 
@@ -462,14 +611,10 @@ class salivary_gland_massage {
     return (x2 - x1).abs();
   }
 
-  double distance(double x1, double y1, double x2, double y2) {
-    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2); // 計算平方距離
-  }
 
-  double angle(double x1, double y1, double x2, double y2) {
-    double dx = x2 - x1;
-    double dy = y2 - y1;
-    return (180 / 3.141592653589793) * atan2(dy, dx); // 計算角度
+
+  double ddistance(double x1, double y1, double x2, double y2) {
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2); // 計算平方距離
   }
 
   void settimer(){
@@ -589,7 +734,7 @@ Future<void> endout12() async {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd').format(now);
   var url;
-  if(Face_Detect_Number==11){
+  if(Face_Detect_Number==12){
     url = Uri.parse(ip+"train_mouthok.php");
     print("初階,吞嚥");
   }

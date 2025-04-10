@@ -39,9 +39,33 @@ class _PoseDetectorViewState extends State<head_turn> {
   void dispose() async {
     _canProcess = false;
     _poseDetector.close();
-    Det.stopReminder();  // 使用 Det 物件的方法
-    Det.stopReminder2(); // 使用 Det 物件的方法
-    Det.player.clearAll();  // 清除所有音頻緩存
+
+    // 停止所有计时器和提醒
+    Det.stopReminder();
+    Det.stopReminder2();
+
+    // 停止所有音频播放
+    Det._isDisposed = true;  // 确保在Det类中添加此标志
+    Det.player.clearAll();   // 清除所有音频缓存
+
+    // 如果有正在播放的音频，强制停止
+    if (Det.player != null) {
+      Det.player.clearAll();  // 清除所有音頻緩存
+      Det.player.fixedPlayer?.stop();  // 停止固定播放器
+      Det.player.fixedPlayer?.dispose();  // 处置固定播放器
+    }
+
+    // 取消所有可能正在运行的Timer
+    if (Det.reminderTimer != null) {
+      Det.reminderTimer!.cancel();
+      Det.reminderTimer = null;
+    }
+
+    if (Det.reminderTimer2 != null) {
+      Det.reminderTimer2!.cancel();
+      Det.reminderTimer2 = null;
+    }
+
     super.dispose();
   }
 
@@ -323,6 +347,8 @@ class Detector_head_turn {
   final player = AudioCache();//播放音檔
   Timer? reminderTimer; // 用於定時提示
   Timer? reminderTimer2; // 用於定時提示
+  bool _isDisposed = false;
+
 
 
   void startd(){//倒數計時
@@ -486,6 +512,7 @@ class Detector_head_turn {
   }
 
   void sounder(int counter){
+    if (_isDisposed) return;
     if(counter == 999 && sound){
       if (right_side && startdDetector) {
         player.play('pose_audios/upper/TurnHead_right.mp3');
@@ -521,15 +548,15 @@ class Detector_head_turn {
 
     reminderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       // 播放音频
-      if(xDistance(posedata[0]!, posedata[1]!, posedata[22]!, posedata[23]!)>230) {
-        if (startdDetector) {
-          if (right_side) {
-            player.play('pose_audios/upper/TurnHead_right.mp3');
-          } else {
-            player.play('pose_audios/upper/TurnHead_left.mp3');
-          }
+      // if(xDistance(posedata[0]!, posedata[1]!, posedata[22]!, posedata[23]!)>230) {
+      if (startdDetector) {
+        if (right_side && xDistance(posedata[0]!, posedata[1]!, posedata[24]!, posedata[25]!)>230) {
+          player.play('pose_audios/upper/TurnHead_right.mp3');
+        } else if(!right_side && xDistance(posedata[0]!, posedata[1]!, posedata[22]!, posedata[23]!)>230) {
+          player.play('pose_audios/upper/TurnHead_left.mp3');
         }
       }
+      // }
       // 每5秒归零并打印当前计数
       print("计数器归零前的计数: $counter");
       counter = 0; // 归零计数器
